@@ -1,10 +1,10 @@
 import pytest
-from utils.api_client import get_client
+from utils.api_client import ModelClient
 
 @pytest.fixture(scope="session")
 def model_client():
-    """全局模型客户端fixture"""
-    return get_client()
+    """提供封装好的 ModelClient 实例"""
+    return ModelClient()
 
 @pytest.fixture
 def safe_prompt():

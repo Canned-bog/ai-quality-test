@@ -24,8 +24,19 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run pytest with API Key
+    - name: Run AI tests
       env:
         DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
       run: |
         pytest test_cases/ -v --tb=short
+
+    # 新增：检查性能测试脚本是否存在
+    - name: Check performance test script
+      run: |
+        if [ -f "performance/ai_benchmark.jmx" ]; then
+          echo "✅ 性能测试脚本存在"
+          echo "   可本地执行: jmeter -n -t performance/ai_benchmark.jmx"
+        else
+          echo "⚠️ 未找到 performance/ai_benchmark.jmx"
+          exit 1
+        fi
