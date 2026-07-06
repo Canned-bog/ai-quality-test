@@ -1,5 +1,25 @@
+import os
+import shutil
+from pathlib import Path
+
 import pytest
 from utils.api_client import ModelClient
+
+REPORTS_DIR = Path(__file__).resolve().parent / "reports"
+
+
+def pytest_sessionstart(session):
+    """测试会话开始前，自动清理上一次运行产生的 reports 目录"""
+    if REPORTS_DIR.exists():
+        for item in REPORTS_DIR.iterdir():
+            try:
+                if item.is_file():
+                    item.unlink()
+                elif item.is_dir():
+                    shutil.rmtree(item)
+            except Exception:
+                pass  # 正在被占用的文件跳过即可
+
 
 @pytest.fixture(scope="session")
 def model_client():
